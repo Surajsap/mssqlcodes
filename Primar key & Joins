@@ -1,0 +1,51 @@
+# mssqlcodes
+use myDB
+---creating Department table
+Create table Department(
+Deptid int primary key,
+Deptname varchar(100),
+Place varchar(100),
+Depthead varchar(100)
+)
+----creating employee table
+Create table Employee(
+id int primary key,
+Empname nvarchar(100),
+Age int,
+Gender varchar(10),
+Dept_id int foreign key references Department(deptid)
+)
+
+select * from Department
+Select * from Employee 
+---inserting values to department
+insert into Department values(1,'Supply','Mysore','Ashik')
+insert into Department values(2,'Project Management','Bangalore','Shriniket')
+insert into Department values(3,'Tech','US','Akshay')
+insert into Department values(4,'Marketing','Bangalore','AJ')
+
+----inserting values to employee
+insert into Employee values(11,'Suraj',25,'Male',1)
+insert into Employee values(13,'Darshan',40,'Male',1)
+insert into Employee values(15,'Rajat',28,'Male',2)
+insert into Employee values(18,'Akarsh',27,'Male',2)
+insert into Employee values(21,'Pujan',25,'Female',3)
+insert into Employee values(24,'Sanjay',28,'Female',3)
+insert into Employee values(26,'Atee',42,'Male',4)
+insert into Employee values(28,'Nupur',32,'female',4)
+insert into Employee values(10,'hema',25,'Male',1)
+insert into Employee values(12,'Nitin',26,'Male',null)
+insert into Employee values(25,'Kabir',26,'Male',null)
+
+update Employee set Empname = 'Hema' where id = 10 
+
+---cross join
+select * from Employee cross join Department
+
+---inner join
+select * from Employee e inner join Department d on e.Dept_id = d.Deptid
+--left join
+select * from Employee e left outer join Department d on e.Dept_id = d.Deptid order by e.Dept_id
+
+select * from Department d Left outer join Employee e on d.Deptid = e.Dept_id
+
