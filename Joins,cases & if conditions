@@ -1,0 +1,59 @@
+use mydb
+
+select * from Employee
+select * from Department
+--------right join
+select * from Employee full outer join Department on employee.Dept_id = Department.Deptid
+
+
+-------self join
+
+create table relation(
+empid int,
+empname varchar(100),
+managerid int)
+
+insert into relation values(1,'AJ',NULL)
+insert into relation values(2,'Ashik',1)
+insert into relation values(3,'Suraj',1)
+insert into relation values(4,'Hema',3)
+insert into relation values(5,'Kavya',3)
+insert into relation values(6,'Bikash',2)
+
+select * from relation
+
+select r.empname as Employee, m.empname as Manager 
+from relation r
+left join relation m 
+on m.empid = r.managerid
+
+Create table details(
+Empid int identity(1,1) not null,
+EMpname varchar(100),
+Empsalary int,
+Sex char
+)
+
+select empid, EMpname,case when Empsalary >=50000 
+                           then 'A-slab' else 'B-slab' 
+						   end as Slabs 
+						   from details
+
+select empid,empname, iif(empsalary >= 50000,'A','B') from details
+
+select empid,empname, case when empsalary >= 50000 
+                           then 'A-slab' 
+						   when empsalary >=30000 and empsalary<50000 
+						   then 'B-slab' else 'C-slab' end 
+						   as Slabs,
+                           iif(Empsalary >=50000,'A-slab',(iif(empsalary >=30000 and empsalary <50000,'B-Slab','C-slab'))) as Slabs
+						   from details
+
+insert into details values('Suraj',30000,'M')
+insert into details values('Kavya',20000,'f')
+insert into details values('Ashik',45000,'M')
+insert into details values('Satya',20000,'M')
+insert into details values('Loknath',20000,'M')
+insert into details values('Darshan',50000,'M')
+insert into details values('Rupi',100000,'M')
+insert into details values('Hema',20000,'M')
