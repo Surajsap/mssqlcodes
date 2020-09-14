@@ -1,0 +1,50 @@
+---------User defined functions------
+
+Create Function fn_age1(@datebirth date)
+returns int
+as 
+Begin
+declare @age int
+set @age = DATEDIFF(YEAR,@datebirth,GETDATE()) - CASE when (MONTH(@datebirth) > Month(getdate())) or 
+                            (MONTH(@datebirth) = Month(GETDATE())) and (day(@datebirth) > day(GETDATE())) then 1 else 0 end
+		return @age
+		END
+
+		use AdventureWorksDW2017
+
+		select DATEDIFF(YEAR,'1994-11-05',GETDATE()) 
+		as AGE, dbo.fn_age1('1994-11-05') 
+		as Age_from_function
+
+		select BirthDate, DATEDIFF(YEAR,BirthDate,GETDATE()) 
+		as AGE, dbo.fn_age1(BirthDate) 
+		as Age_from_function 
+		from DimCustomer
+		where dbo.fn_age1(BirthDate) > 45
+		order by Age_from_function
+
+-------------------------Inline table value function---------------------------------
+
+CREATE FUNCTION EngOcc(@Occupation1 nvarchar(100)) 
+RETURNS TABLE
+AS
+RETURN (Select Firstname,Lastname, Gender, Yearlyincome, EnglishOccupation from DimCustomer
+         where EnglishOccupation = @Occupation1)
+
+		 Select * from EngOcc('professional')
+
+		 select distinct EnglishOccupation from DimCustomer
+
+--------------------------multi value table function-----------------------------
+
+
+ALTER function EngOccMVT(@occu nvarchar(10))
+returns @table table (Firstname varchar(100),Gender varchar(6),EnglishOccupation varchar(100)) as
+begin 
+insert into @table 
+        Select Firstname, Gender, EnglishOccupation from DimCustomer
+         where EnglishOccupation = @occu
+	return 
+	END
+
+select * from EngOccMVT('professional')
