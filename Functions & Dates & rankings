@@ -1,0 +1,89 @@
+select left('Janbask',6)
+
+use AdventureWorksDW2017
+
+select * from DimCustomer
+
+select firstname, ISNULL(Middlename,'XYZ') as newmiddlename from DimCustomer
+
+select firstname,title, coalesce(middlename, title, 'XYZ') from DimCustomer where title is  null
+
+select LEN(firstname), LEN(LastName), LEN(MiddleName) from DimCustomer
+
+select LEN(trim('Suraj A Patil'))
+
+select LTRIM('Hema            ')
+
+select LEFT('Suraj A Patil',7)
+
+select emailaddress, CHARINDEX('@',emailaddress) from DimCustomer
+
+select emailaddress, LEFT(emailaddress, CHARINDEX('@',emailaddress)-1) from DimCustomer
+
+select SUBSTRING('Suraj A Patil',2,12)
+
+select emailaddress , substring(emailaddress,CHARINDEX('@',emailaddress)+1,
+                      len(emailaddress)-CHARINDEX('@',emailaddress)-4) from DimCustomer
+
+create table Datetimeformat(
+normaldate date,
+small_datetime smalldatetime,
+date_time datetime,
+date_time2 datetime2,
+offsetdatetime datetimeoffset
+)
+
+select GETDATE()
+
+insert into Datetimeformat values(GETDATE(),GETDATE(),GETDATE(),GETDATE(),GETDATE())
+
+select * from Datetimeformat
+
+select ISDATE('Suraj')  -----proveides true or flase
+select ISDATE('2020-09-14')  
+select ISDATE('2020-14-14')
+
+select DAY(GETDATE()),GETDATE()
+select MONTH(GETDATE()),GETDATE()
+select GETDATE()
+
+select YEAR(birthdate),DAY(BirthDate),birthdate
+from DimCustomer
+where YEAR(BirthDate) > '1980' 
+order by YEAR(birthdate)
+
+select DATEPART(QUARTER,GETDATE())
+
+select DATENAME(WEEKDAY,GETDATE())
+
+select DATEDIFF(DAY,GETDATE(),'2021-06-05')
+select DATEADD(DAY,80,GETDATE())
+
+select DATEADD(DAY,-80,GETDATE())
+
+----------------------calculate age------------------
+select FirstName + ' ' + LastName, birthdate, 
+DATEDIFF(YEAR,birthdate,GETDATE()) as Age,  ---age
+dateadd(Year,10,getdate()) AS dateafter10yrs, ---date after 10 years---
+DATEDIFF(YEAR,BirthDate,DATEADD(YEAR,10,GETDATE())) ageafter10yrs  ---age after 10years
+ from DimCustomer
+
+ use myDB
+
+ select * from DupEmp
+
+ update DupEmp set Salary = '5000' where Emp_id = 2
+ --------------Rankings------------------------------
+ select * , ROW_NUMBER() over(order by salary desc) as rowrank,
+            RANK() over(order by salary desc) as rank,
+			DENSE_RANK() over (order by salary desc) as denserank
+ 
+ from DupEmp
+ ----------------------Partitons----------------------
+ select * , ROW_NUMBER() over(partition by sex order by empsalary desc) as rowrank,
+            RANK() over(partition by sex order by empsalary desc) as rank,
+			DENSE_RANK() over (partition by sex order by empsalary desc) as denserank
+ 
+ from details
+ select * from details
+
