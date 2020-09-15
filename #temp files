@@ -1,0 +1,12 @@
+use AdventureWorksDW2017
+drop table #temp
+
+
+select * into #temp1    --------------can be used only in particular query window
+from DimCustomer 
+where EnglishEducation = 'Bachelors'
+
+select * from #temp
+
+select * into ##temp ---------------can be used in any query window
+from DimCustomer where EnglishEducation = 'Bachelors'
