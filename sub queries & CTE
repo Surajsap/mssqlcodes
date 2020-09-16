@@ -1,0 +1,35 @@
+use AdventureWorksDW2017
+
+select * from DimProduct
+select * from DimProductCategory
+select * from DimProductSubcategory
+select * from FactInternetSales
+
+select dp.EnglishProductName, dpc.EnglishProductCategoryName, dps.EnglishProductSubcategoryName, fis.SalesAmount  
+         from DimProductCategory DPC 
+		 inner join DimProductSubcategory DPS 
+		 on dpc.ProductCategoryKey = dps.ProductCategoryKey
+		 inner join FactInternetSales FIS on
+		 dps.ProductCategoryKey = FIS.PromotionKey
+		 inner join DimProduct DP on
+		 DPS.ProductCategoryKey = dp.ProductKey
+	
+	----------------------------------------------------------------------------------------------
+	use myDB
+	select * from
+	      (select  *, ROW_NUMBER() OVER (order by Empsalary desc) as rownumber,
+           RANK() over (order by Empsalary desc) as rankname,
+		   DENSE_RANK() over (order by Empsalary desc) denserank
+		   from details) 
+		   AS tbl_details 
+		   where rownumber in (1,2,3,4)
+
+		   ---------------------CTE common table ex[ressiom-----------
+
+	with CTEtable(ID,Ename,salary,Gender,rrank)  ---changing column name is optional
+	AS
+	( select  *, ROW_NUMBER() OVER (order by Empsalary desc) as rownumber from details)
+	select * from CTEtable where rrank in (1,2,3,4)
+
+		          
+		
