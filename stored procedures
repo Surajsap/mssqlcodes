@@ -1,0 +1,64 @@
+use AdventureWorksDW2017
+------------creating store procedures----------
+CREATE PROCEDURE getCusomerDetails
+AS
+Begin
+      Select * from DimCustomer
+END
+-----executing store procedures
+------SPs cant be called from select where clauses
+getcusomerdetails
+
+EXEC getcusomerdetails
+
+ALTER PROCEDURE getCusomerDetails @customerkey int
+AS
+Begin
+      Select * from DimCustomer where  CustomerKey = @customerkey
+END
+
+EXEC getcusomerdetails 'S'
+
+------------------------------------------------------------------------------------------------------------
+ALTER PROCEDURE updateinsertDetails @customerkey int, @customerAlternatekey varchar(100),
+              @firstname varchar(100), @lastname varchar(100), @emailaddress varchar(300)
+AS
+BEGIN
+    if exists (select * from DimCustomer where CustomerKey = @customerkey)
+	    begin
+		    UPDATE DimCustomer
+			set 
+			    CustomerAlternateKey = @customerAlternatekey,
+				Firstname = @firstname,
+				LastName = @lastname,
+				EmailAddress = @emailaddress
+		  Where CustomerKey = @customerkey
+		print 'Values Updated Succesfully' + cast(@customerkey as Varchar)
+		END
+	else 
+	   BEGIN
+	       insert into DimCustomer(CustomerAlternateKey,FirstName,LastName,EmailAddress)
+		   values(@customerAlternatekey,@firstname,@lastname,@emailaddress)
+	     print 'Values Inserted Succesfully' +' '+ cast(@customerkey as Varchar)
+		 select top 1 @customerkey = customerkey from DimCustomer order by CustomerKey DESC
+		 END
+		 print @customerkey
+	   exec getCusomerDetails @customerkey
+	END
+-------------------------------------------------------------------------------------------------------
+	EXEC updateinsertDetails 22222, '1000001', 'Sapna','Deshpande','sapna@ms.com'
+
+	EXEC updateinsertDetails 0001,'1', 'Sneha','Deshpande','sneha@ms.com'
+
+	EXEC updateinsertDetails 0002,'2', 'Ajay','Verma','ajay@ms.com'
+
+	exec updateinsertDetails 003,'3', 'Ghouse','Mohammed', 'ghouse@mail.com'
+
+	exec updateinsertDetails 005,'5', 'Ashik','Q', 'Ashik@mail.com'
+
+	exec updateinsertDetails 007,'7', 'Five','names', 'Five@mail.com'
+
+
+
+
+	select * from DimCustomer where CustomerAlternateKey = '1'
